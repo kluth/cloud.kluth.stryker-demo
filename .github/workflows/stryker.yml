@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_OPTIONS: "--max-old-space-size=4096"
+      NX_DAEMON: "false"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,10 +37,10 @@ jobs:
         run: npm ci
 
       - name: Build workspace projects
-        run: npx nx run-many -t build
+        run: npx nx run-many -t build --skip-nx-cache
 
       - name: Run Stryker Mutation Testing
-        run: npx stryker run --concurrency 2
+        run: npx stryker run
 
       - name: Upload Stryker HTML Report Artifact
         uses: actions/upload-artifact@v4
@@ -47,4 +48,5 @@ jobs:
         with:
           name: stryker-mutation-report
           path: reports/mutation/
+          if-no-files-found: ignore
           retention-days: 30
