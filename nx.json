@@ -48,6 +48,13 @@
         "production",
         "^production"
       ]
+    },
+    "stryker": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx stryker run --mutate \"{projectRoot}/src/**/*.ts\"",
+        "forwardAllArgs": true
+      }
     }
   },
   "release": {
