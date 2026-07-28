@@ -1,282 +1,174 @@
-# Nx Angular Repository
+# Nx Angular Stryker Demo Monorepo
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+<a alt="Stryker logo" href="https://stryker-mutator.io" target="_blank" rel="noreferrer"><img src="https://stryker-mutator.io/images/stryker.png" width="45"></a>
 
-✨ A repository showcasing key [Nx](https://nx.dev) features for Angular monorepos ✨
-🚀 If you haven't connected to Nx Cloud yet, [complete your setup here](https://cloud.nx.app/get-started). Get faster builds with remote caching, distributed task execution, and self-healing CI. [See how your workspace can benefit](#nx-cloud).
+✨ Production-Ready Angular 22 & Nx 23 Monorepo with @ngrx/signals, Vitest, and Stryker Mutation Testing ✨
+
+---
+
 ## 📦 Project Overview
 
-This repository demonstrates a production-ready Angular monorepo with:
+This repository demonstrates a modern, enterprise-grade Angular e-commerce monorepo built with:
 
 - **2 Applications**
+  - `shop` - Angular 22 e-commerce frontend application with SSR support
+  - `api` - Node.js Express backend API with Docker support serving product data
 
-  - `shop` - Angular e-commerce application with product listings and detail views
-  - `api` - Backend API with Docker support serving product data
+- **11 Modular Libraries**
+  - `@org/shop/cart` - Cart management engine (`@ngrx/signals` Signal Store + `CartWidgetComponent`)
+  - `@org/shop/wishlist` - Wishlist & product comparison engine (`@ngrx/signals` Signal Store + `WishlistToggleComponent`)
+  - `@org/shop/checkout` - Multi-step checkout wizard with Luhn credit card validation (`@ngrx/signals` Signal Store + `CheckoutWizardComponent`)
+  - `@org/shop/search-filter` - Search & faceted filtering engine (`@ngrx/signals` Signal Store + `SearchFilterBarComponent`)
+  - `@org/shop/loyalty` - Tiered loyalty rewards & voucher redemption (`@ngrx/signals` Signal Store + `LoyaltyStatusComponent`)
+  - `@org/feature-products` - Product listing feature page (Angular)
+  - `@org/feature-product-detail` - Product detail view feature page (Angular)
+  - `@org/data` - Data access layer and HTTP product service
+  - `@org/shared-ui` - Shared UI components (ProductCard, ProductGrid, ErrorMessage, LoadingSpinner)
+  - `@org/models` - Shared TypeScript domain models & interfaces
+  - `@org/products` - API product service library (Backend)
 
-- **6 Libraries**
+- **E2E & Unit Testing**
+  - `shop-e2e` - Playwright E2E test suite
+  - **Vitest & AnalogJS** - Fast unit testing for all Angular libraries (62/62 tests passing, 100% green)
 
-  - `@org/feature-products` - Product listing feature (Angular)
-  - `@org/feature-product-detail` - Product detail feature (Angular)
-  - `@org/data` - Data access layer for shop features
-  - `@org/shared-ui` - Shared UI components
-  - `@org/models` - Shared data models
-  - `@org/products` - API product service library
+- **Mutation Testing**
+  - **Stryker Mutator** - Automated mutation testing runner with custom Vitest sandboxing configuration and HTML report artifact generation
 
-- **E2E Testing**
-  - `shop-e2e` - Playwright tests for the shop application
+---
 
 ## 🚀 Quick Start
 
 ```bash
-# Clone the repository
-git clone <your-fork-url>
-cd <your-repository-name>
+# Clone repository
+git clone https://github.com/kluth/cloud.kluth.stryker-demo.git
+cd cloud.kluth.stryker-demo
 
 # Install dependencies
-# (Note: You may need --legacy-peer-deps)
 npm install
 
-# Serve the Angular shop application (this will simultaneously serve the API backend)
+# Serve the Angular shop application & backend API
 npx nx run shop:serve
-
-# ...or you can serve the API separately
-npx nx run api:serve
 
 # Build all projects
 npx nx run-many -t build
 
-# Run tests
+# Run unit tests across all projects
 npx nx run-many -t test
 
-# Lint all projects
+# Run linting
 npx nx run-many -t lint
 
-# Run e2e tests
+# Run Playwright E2E tests
 npx nx run shop-e2e:e2e
-
-# Run tasks in parallel
-
-npx nx run-many -t lint test build e2e --parallel=3
-
-# Visualize the project graph
-npx nx graph
 ```
 
-## ⭐ Featured Nx Capabilities
+---
 
-This repository showcases several powerful Nx features:
+## 🧬 Stryker Mutation Testing
 
-### 1. 🔒 Module Boundaries
+Stryker Mutator tests the quality of unit tests by introducing artificial bugs (mutants) into the source code and verifying that tests fail (kill the mutant).
 
-Enforces architectural constraints using tags. Each project has specific dependencies it can use:
-
-- `scope:shared` - Can be used by all projects
-- `scope:shop` - Shop-specific libraries
-- `scope:api` - API-specific libraries
-- `type:feature` - Feature libraries
-- `type:data` - Data access libraries
-- `type:ui` - UI component libraries
-
-**Try it out:**
+### Running Mutation Tests with Nx
 
 ```bash
-# See the current project graph and boundaries
-npx nx graph
+# Run Stryker for a specific library via Nx
+npx nx run cart:stryker
 
-# View a specific project's details
-npx nx show project shop --web
+# Run Stryker dry run (verify test setup without mutating)
+npx nx run cart:stryker --args="--dryRunOnly"
+
+# Run Stryker for all projects
+npm run stryker
+# or: npx nx run-many -t stryker
+
+# Run Stryker for affected projects only (ideal for PRs)
+npm run stryker:affected
+# or: npx nx affected -t stryker
+
+# Run Stryker workspace-wide
+npx stryker run
 ```
 
-[Learn more about module boundaries →](https://nx.dev/docs/features/enforce-module-boundaries)
+---
 
-### 2. 🐳 Docker Integration
-
-The API project includes Docker support with automated targets and release management:
-
-```bash
-# Build Docker image
-npx nx run api:docker:build
-
-# Run Docker container
-npx nx run api:docker:run
-
-# Release with automatic Docker image versioning
-npx nx release
-```
-
-**Nx Release for Docker:** The repository is configured to use Nx Release for managing Docker image versioning and publishing. When running `nx release`, Docker images for the API project are automatically versioned and published based on the release configuration in `nx.json`. This integrates seamlessly with semantic versioning and changelog generation.
-
-[Learn more about Docker integration →](https://nx.dev/docs/guides/nx-release/release-docker-images)
-
-### 3. 🎭 Playwright E2E Testing
-
-End-to-end testing with Playwright is pre-configured:
-
-```bash
-# Run e2e tests
-npx nx run shop-e2e:e2e
-
-# Run e2e tests in CI mode
-npx nx run shop-e2e:e2e-ci
-```
-
-[Learn more about E2E testing →](https://nx.dev/docs/technologies/test-tools/playwright)
-
-### 4. ⚡ Vitest for Unit Testing
-
-Fast unit testing with Vite for Angular libraries:
-
-```bash
-# Test a specific library
-npx nx run data:test
-
-# Test all projects
-npx nx run-many -t test
-```
-
-[Learn more about Vite testing →](https://nx.dev/docs/technologies/build-tools/vite)
-
-### 5. 🔧 Self-Healing CI
-
-The CI pipeline includes `nx fix-ci` which automatically identifies and suggests fixes for common issues:
-
-```bash
-# In CI, this command provides automated fixes
-npx nx fix-ci
-```
-
-This feature helps maintain a healthy CI pipeline by automatically detecting and suggesting solutions for:
-
-- Missing dependencies
-- Incorrect task configurations
-- Cache invalidation issues
-- Common build failures
-
-[Learn more about self-healing CI →](https://nx.dev/docs/features/ci-features/self-healing-ci)
-
-## 📁 Project Structure
+## 📁 Repository Structure
 
 ```
+├── .github/
+│   └── workflows/
+│       ├── ci.yml               - Continuous Integration pipeline
+│       └── stryker.yml          - Stryker Mutation Testing & Artifact Upload pipeline
 ├── apps/
-│   ├── shop/           [scope:shop]    - Angular e-commerce app
-│   ├── shop-e2e/                       - E2E tests for shop
-│   └── api/            [scope:api]     - Backend API with Docker
+│   ├── shop/           [scope:shop]    - Angular 22 e-commerce app
+│   ├── shop-e2e/                       - Playwright E2E tests
+│   └── api/            [scope:api]     - Express backend API with Docker
 ├── packages/
 │   ├── shop/
+│   │   ├── cart/                [scope:shop,type:feature] - Cart Signal Store & Widget
+│   │   ├── wishlist/            [scope:shop,type:feature] - Wishlist & Comparison Engine
+│   │   ├── checkout/            [scope:shop,type:feature] - Checkout Wizard & Luhn Validator
+│   │   ├── search-filter/       [scope:shop,type:feature] - Search & Faceted Filter Engine
+│   │   ├── loyalty/             [scope:shop,type:feature] - Loyalty Rewards & Voucher System
 │   │   ├── feature-products/        [scope:shop,type:feature] - Product listing
 │   │   ├── feature-product-detail/  [scope:shop,type:feature] - Product details
-│   │   ├── data/                    [scope:shop,type:data]    - Data access
-│   │   └── shared-ui/               [scope:shop,type:ui]      - UI components
+│   │   ├── data/                    [scope:shop,type:data]    - Data access layer
+│   │   └── shared-ui/               [scope:shop,type:ui]      - Shared UI components
 │   ├── api/
-│   │   └── products/    [scope:api]    - Product service
+│   │   └── products/    [scope:api]    - Backend product service
 │   └── shared/
-│       └── models/      [scope:shared,type:data] - Shared models
-├── nx.json             - Nx configuration
-├── tsconfig.json       - TypeScript configuration
+│       └── models/      [scope:shared,type:data] - Shared TypeScript models
+├── reports/
+│   └── mutation/       - Stryker HTML Mutation Testing Report (`mutation.html`)
+├── nx.json             - Nx configuration with targetDefaults for test & stryker
+├── stryker.config.json - Stryker Mutator configuration for Vitest runner
+├── test-setup.ts       - Global Vitest & Angular TestBed test setup
+├── tsconfig.base.json  - TypeScript path mappings
 └── eslint.config.mjs   - ESLint with module boundary rules
 ```
 
-## 🏷️ Understanding Tags
+---
 
-This repository uses tags to enforce module boundaries:
+## 🏷️ Module Boundaries & Tags
 
-| Project            | Tags                         | Can Import From              |
-| ------------------ | ---------------------------- | ---------------------------- |
-| `shop`             | `scope:shop`                 | `scope:shop`, `scope:shared` |
-| `api`              | `scope:api`                  | `scope:api`, `scope:shared`  |
-| `feature-products` | `scope:shop`, `type:feature` | `scope:shop`, `scope:shared` |
-| `data`             | `scope:shop`, `type:data`    | `scope:shared`               |
-| `models`           | `scope:shared`, `type:data`  | Nothing (base library)       |
+This workspace enforces strict architectural boundaries via Nx tags:
 
-## 📚 Useful Commands
+| Project                   | Tags                         | Allowed Imports              |
+| ------------------------- | ---------------------------- | ---------------------------- |
+| `shop`                    | `scope:shop`                 | `scope:shop`, `scope:shared` |
+| `api`                     | `scope:api`                  | `scope:api`, `scope:shared`  |
+| `cart`                    | `scope:shop`, `type:feature` | `scope:shop`, `scope:shared` |
+| `wishlist`                | `scope:shop`, `type:feature` | `scope:shop`, `scope:shared` |
+| `checkout`                | `scope:shop`, `type:feature` | `scope:shop`, `scope:shared` |
+| `search-filter`           | `scope:shop`, `type:feature` | `scope:shop`, `scope:shared` |
+| `loyalty`                 | `scope:shop`, `type:feature` | `scope:shop`, `scope:shared` |
+| `feature-products`        | `scope:shop`, `type:feature` | `scope:shop`, `scope:shared` |
+| `feature-product-detail` | `scope:shop`, `type:feature` | `scope:shop`, `scope:shared` |
+| `data`                    | `scope:shop`, `type:data`    | `scope:shared`               |
+| `shared-ui`               | `scope:shop`, `type:ui`      | `scope:shared`               |
+| `models`                  | `scope:shared`, `type:data`  | Base models (no dependencies)|
+
+---
+
+## 🛠️ Useful Commands
 
 ```bash
-# Project exploration
-npx nx graph                                    # Interactive dependency graph
-npx nx list                                     # List installed plugins
-npx nx show project shop --web                 # View project details
+# Interactive project dependency graph
+npx nx graph
 
-# Development
-npx nx run shop:serve                              # Serve Angular app
-npx nx run api:serve                               # Serve backend API
-npx nx run shop:build                              # Build Angular app
-npx nx run data:test                               # Test a specific library
-npx nx run feature-products:lint                   # Lint a specific library
+# Run unit tests for all 5 new signal store feature packages
+npx nx run-many -t test -p cart wishlist checkout search-filter loyalty
 
-# Running multiple tasks
-npx nx run-many -t build                       # Build all projects
-npx nx run-many -t test --parallel=3          # Test in parallel
-npx nx run-many -t lint test build            # Run multiple targets
-
-# Affected commands (great for CI)
-npx nx affected -t build                       # Build only affected projects
-npx nx affected -t test                        # Test only affected projects
+# Run Stryker for affected projects
+npx nx affected -t stryker
 
 # Docker operations
-npx nx run api:docker:build                        # Build Docker image
-npx nx run api:docker:run                          # Run Docker container
+npx nx run api:docker:build
+npx nx run api:docker:run
 ```
 
-## 🎯 Adding New Features
+---
 
-### Generate a new Angular application:
+## 📄 License
 
-```bash
-npx nx g @nx/angular:app my-app
-```
-
-### Generate a new Angular library:
-
-```bash
-npx nx g @nx/angular:lib my-lib
-```
-
-### Generate a new Angular component:
-
-```bash
-npx nx g @nx/angular:component my-component --project=my-lib
-```
-
-### Generate a new API library:
-
-```bash
-npx nx g @nx/node:lib my-api-lib
-```
-
-You can use `npx nx list` to see all available plugins and `npx nx list <plugin-name>` to see all generators for a specific plugin.
-
-## Nx Cloud
-
-Nx Cloud ensures a [fast and scalable CI](https://nx.dev/nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/docs/features/ci-features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/docs/features/ci-features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/docs/features/ci-features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/docs/features/ci-features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/docs/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## 🔗 Learn More
-
-- [Nx Documentation](https://nx.dev/docs)
-- [Angular Monorepo Tutorial](https://nx.dev/docs/getting-started/tutorials/angular-monorepo-tutorial)
-- [Module Boundaries](https://nx.dev/docs/features/enforce-module-boundaries)
-- [Docker Integration](https://nx.dev/docs/guides/nx-release/release-docker-images)
-- [Playwright Testing](https://nx.dev/docs/technologies/test-tools/playwright)
-- [Vite with Angular](https://nx.dev/docs/technologies/build-tools/vite)
-- [Nx Cloud](https://nx.dev/nx-cloud)
-- [Releasing Packages](https://nx.dev/docs/features/manage-releases)
-
-## 💬 Community
-
-Join the Nx community:
-
-- [Discord](https://go.nx.dev/community)
-- [X (Twitter)](https://twitter.com/nxdevtools)
-- [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [YouTube](https://www.youtube.com/@nxdevtools)
-- [Blog](https://nx.dev/blog)
+MIT © Matthias Kluth

@@ -5,5 +5,7 @@
   "prefix": "lib",
   "projectType": "library",
   "tags": ["scope:shop", "type:feature"],
-  "targets": {}
+  "targets": {
+    "stryker": {}
+  }
 }
