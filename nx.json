@@ -53,7 +53,10 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "npx stryker run --mutate \"{projectRoot}/src/**/*.ts\"",
-        "forwardAllArgs": true
+        "forwardAllArgs": true,
+        "env": {
+          "NX_DAEMON": "false"
+        }
       }
     }
   },
