@@ -99,7 +99,7 @@ describe('LoyaltyStore', () => {
   it('should mark voucher as used when markVoucherAsUsed is called', () => {
     store.addBonusPoints(600, 'Promo bonus');
     const result = store.redeemVoucher('v-5usd');
-    const code = result.voucher!.code;
+    const code = result.voucher?.code ?? '';
 
     store.markVoucherAsUsed(code);
     expect(store.claimedVouchers()[0].isRedeemed).toBe(true);
