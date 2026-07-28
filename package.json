@@ -2,7 +2,10 @@
   "name": "@org/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "stryker": "nx run-many -t stryker",
+    "stryker:affected": "nx affected -t stryker"
+  },
   "private": true,
   "dependencies": {
     "@angular-devkit/build-angular": "22.0.6",
