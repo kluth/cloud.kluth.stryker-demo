@@ -10,7 +10,7 @@
   "testRunner": "vitest",
   "testRunner_comment": "Take a look at https://stryker-mutator.io/docs/stryker-js/vitest-runner for information about the vitest plugin.",
   "coverageAnalysis": "perTest",
-  "buildCommand": "npx nx run-many -t build",
+  "buildCommand": "npx nx run-many -t build --skip-nx-cache",
   "testFiles": [
     "./**/*.spec.ts"
   ],
@@ -21,7 +21,10 @@
   "allowEmpty": true,
   "allowConsoleColors": true,
   "ignorePatterns": [
-    "./**/node_modules/**"
+    "./**/node_modules/**",
+    "./**/.nx/**",
+    "./**/dist/**",
+    "./**/reports/**"
   ],
   "cleanTempDir": true
 }
