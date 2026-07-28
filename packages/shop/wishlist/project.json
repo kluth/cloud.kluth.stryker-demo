@@ -1,0 +1,9 @@
+{
+  "name": "wishlist",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/shop/wishlist/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:shop", "type:feature"],
+  "targets": {}
+}
