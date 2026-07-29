@@ -3,6 +3,14 @@
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 <a alt="Stryker logo" href="https://stryker-mutator.io" target="_blank" rel="noreferrer"><img src="https://stryker-mutator.io/images/stryker.png" width="45"></a>
 
+[![CI](https://github.com/kluth/cloud.kluth.stryker-demo/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/kluth/cloud.kluth.stryker-demo/actions/workflows/ci.yml)
+[![Stryker Mutation Testing](https://github.com/kluth/cloud.kluth.stryker-demo/actions/workflows/stryker.yml/badge.svg?branch=main)](https://github.com/kluth/cloud.kluth.stryker-demo/actions/workflows/stryker.yml)
+[![Stryker Mutation Score](https://img.shields.io/badge/Stryker%20Mutation%20Score-100%25-brightgreen.svg)](reports/mutation/mutation.html)
+[![Code Coverage](https://img.shields.io/badge/Test%20Coverage-100%25-brightgreen.svg)](#testing--quality-assurance)
+[![Nx Monorepo](https://img.shields.io/badge/Nx-v23.1.0-blue.svg)](https://nx.dev)
+[![Angular](https://img.shields.io/badge/Angular-v22.0.6-dd0031.svg)](https://angular.dev)
+[![NgRx Signals](https://img.shields.io/badge/NgRx%20Signals-v21.1.1-ba2bd2.svg)](https://ngrx.io/guide/signals)
+
 ✨ Production-Ready Angular 22 & Nx 23 Monorepo with @ngrx/signals, Vitest, and Stryker Mutation Testing ✨
 
 ---
