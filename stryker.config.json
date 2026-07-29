@@ -27,5 +27,6 @@
     "./**/dist/**",
     "./**/reports/**"
   ],
-  "cleanTempDir": true
+  "cleanTempDir": true,
+  "ignoreStatic": true
 }
