@@ -51,3 +51,5 @@ vitest.config.*.timestamp*
 .nx/migrate-runs
 # stryker temp files
 .stryker-tmp
+/reports
+
