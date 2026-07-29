@@ -28,5 +28,8 @@
     "./**/reports/**"
   ],
   "cleanTempDir": true,
-  "ignoreStatic": true
+  "ignoreStatic": true,
+  "htmlReporter": {
+    "fileName": "reports/mutation/mutation.html"
+  }
 }

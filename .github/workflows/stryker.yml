@@ -39,8 +39,8 @@ jobs:
       - name: Build workspace projects
         run: npx nx run-many -t build --skip-nx-cache
 
-      - name: Clean previous report
-        run: rm -rf reports/mutation/
+      - name: Clean reports directory
+        run: rm -rf reports/
 
       - name: Run Stryker Mutation Testing
         run: npx stryker run
@@ -49,8 +49,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: stryker-mutation-report
+          name: stryker-mutation-report-run-${{ github.run_number }}
           path: reports/mutation/
           if-no-files-found: ignore
           retention-days: 30
-          overwrite: true
