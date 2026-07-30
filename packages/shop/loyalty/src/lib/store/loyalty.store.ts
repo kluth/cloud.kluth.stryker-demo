@@ -195,5 +195,11 @@ export const LoyaltyStore = signalStore(
       });
       patchState(store, { claimedVouchers: updated });
     },
+
+    hasSufficientPoints(voucherId: string): boolean {
+      const voucher = VOUCHER_CATALOG.find((v) => v.id === voucherId);
+      if (!voucher) return false;
+      return store.pointsBalance() >= voucher.pointsCost;
+    },
   }))
 );

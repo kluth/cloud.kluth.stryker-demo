@@ -104,4 +104,11 @@ describe('LoyaltyStore', () => {
     store.markVoucherAsUsed(code);
     expect(store.claimedVouchers()[0].isRedeemed).toBe(true);
   });
+
+  it('should verify hasSufficientPoints correctly for existing and missing vouchers', () => {
+    store.addBonusPoints(400, 'Test bonus');
+    expect(store.hasSufficientPoints('v-3usd')).toBe(true); // costs 300
+    expect(store.hasSufficientPoints('v-5usd')).toBe(false); // costs 500
+    expect(store.hasSufficientPoints('non-existent')).toBe(false);
+  });
 });
