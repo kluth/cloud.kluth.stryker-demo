@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "test": "nx run-many -t test",
     "stryker": "stryker run",
     "stryker:full": "stryker run stryker.full.config.json",
     "stryker:affected": "nx affected -t stryker --parallel=1"
