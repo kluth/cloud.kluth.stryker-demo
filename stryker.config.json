@@ -22,7 +22,10 @@
     "./**/*.spec.ts"
   ],
   "mutate": [
-    "@git"
+    "packages/shop/*/src/lib/**/*.ts",
+    "packages/shared/models/src/**/*.ts",
+    "!packages/shop/*/src/lib/**/*.spec.ts",
+    "!packages/shared/models/src/**/*.spec.ts"
   ],
   "allowEmpty": true,
   "allowConsoleColors": true,
