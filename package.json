@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "stryker": "nx run-many -t stryker",
-    "stryker:affected": "nx affected -t stryker"
+    "stryker": "nx run-many -t stryker --parallel=1",
+    "stryker:affected": "nx affected -t stryker --parallel=1"
   },
   "private": true,
   "dependencies": {
