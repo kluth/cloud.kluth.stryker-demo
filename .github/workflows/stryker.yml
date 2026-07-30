@@ -10,11 +10,6 @@ on:
       - main
       - develop
   workflow_dispatch:
-    inputs:
-      full_run:
-        description: 'Run full workspace mutation test across all 21 files'
-        type: boolean
-        default: false
 
 permissions:
   contents: read
@@ -26,6 +21,7 @@ jobs:
     env:
       NODE_OPTIONS: "--max-old-space-size=4096"
       NX_DAEMON: "false"
+      NX_GENERATE_SUMMARY: "false"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,24 +34,26 @@ jobs:
           node-version: 22
           cache: 'npm'
 
+      - name: Restore Stryker Incremental Cache
+        uses: actions/cache@v4
+        with:
+          path: reports/stryker-incremental.json
+          key: stryker-incremental-${{ runner.os }}-${{ github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            stryker-incremental-${{ runner.os }}-${{ github.ref_name }}-
+            stryker-incremental-${{ runner.os }}-
+
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
       - name: Build workspace projects
         run: npx nx run-many -t build --skip-nx-cache
 
-      - name: Clean reports directory
-        run: rm -rf reports/
+      - name: Clean previous HTML reports
+        run: rm -rf reports/mutation/
 
       - name: Run Stryker Mutation Testing
-        run: |
-          if [ "${{ inputs.full_run }}" = "true" ]; then
-            echo "Running FULL workspace mutation test across all 21 files..."
-            npx stryker run stryker.full.config.json
-          else
-            echo "Running FAST incremental mutation test on git-changed files..."
-            npx stryker run
-          fi
+        run: npx stryker run
 
       - name: Generate Workflow Step Summary
         if: always()
@@ -64,7 +62,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Mode:** ${{ inputs.full_run == true && 'FULL Workspace' || 'FAST Incremental (@git)' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Mode:** Incremental Mutation Testing" >> $GITHUB_STEP_SUMMARY
           echo "- **Status:** Completed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "The HTML report artifact \`stryker-mutation-report-run-${{ github.run_number }}\` contains the fresh, single-run report." >> $GITHUB_STEP_SUMMARY
