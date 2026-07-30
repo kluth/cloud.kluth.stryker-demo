@@ -45,6 +45,17 @@ jobs:
       - name: Run Stryker Mutation Testing
         run: npx stryker run
 
+      - name: Generate Workflow Step Summary
+        if: always()
+        run: |
+          echo "# 🧬 Stryker Mutation Testing Summary (Run #${{ github.run_number }})" > $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** Completed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The HTML report artifact \`stryker-mutation-report-run-${{ github.run_number }}\` contains the fresh, single-run report." >> $GITHUB_STEP_SUMMARY
+
       - name: Upload Stryker HTML Report Artifact
         uses: actions/upload-artifact@v4
         if: always()
