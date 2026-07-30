@@ -11,13 +11,12 @@
   "testRunner_comment": "Take a look at https://stryker-mutator.io/docs/stryker-js/vitest-runner for information about the vitest plugin.",
   "coverageAnalysis": "perTest",
   "buildCommand": "npx nx run-many -t build --skip-nx-cache",
-  "concurrency": 1,
+  "concurrency": 2,
   "testFiles": [
     "./**/*.spec.ts"
   ],
   "mutate": [
-	"{apps,packages}/**/!(*.+(s|S)pec|*.+(t|T)est).+(cjs|mjs|js|ts|mts|cts|jsx|tsx|html|vue|svelte)",
-	"!{apps,packages}/**/__tests__/**/*.+(cjs|mjs|js|ts|mts|cts|jsx|tsx|html|vue|svelte)"
+    "@git"
   ],
   "allowEmpty": true,
   "allowConsoleColors": true,
