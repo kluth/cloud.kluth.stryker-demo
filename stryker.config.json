@@ -1,22 +1,29 @@
 {
   "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
-  "_comment": "This config was generated using 'stryker init'. Please take a look at: https://stryker-mutator.io/docs/stryker-js/configuration/ for more information.",
   "packageManager": "npm",
-  "reporters": [
-    "html",
-    "clear-text",
-    "progress"
-  ],
   "testRunner": "vitest",
-  "testRunner_comment": "Take a look at https://stryker-mutator.io/docs/stryker-js/vitest-runner for information about the vitest plugin.",
   "coverageAnalysis": "perTest",
   "buildCommand": "npx nx run-many -t build --skip-nx-cache",
   "concurrency": 2,
+  "reporters": [
+    "html",
+    "json",
+    "clear-text",
+    "progress"
+  ],
+  "thresholds": {
+    "high": 80,
+    "low": 60,
+    "break": 80
+  },
   "testFiles": [
     "./**/*.spec.ts"
   ],
   "mutate": [
-    "@git"
+    "packages/shop/*/src/lib/**/*.ts",
+    "packages/shared/models/src/**/*.ts",
+    "!packages/shop/*/src/lib/**/*.spec.ts",
+    "!packages/shared/models/src/**/*.spec.ts"
   ],
   "allowEmpty": true,
   "allowConsoleColors": true,
@@ -24,11 +31,20 @@
     "./**/node_modules/**",
     "./**/.nx/**",
     "./**/dist/**",
-    "./**/reports/**"
+    "./**/reports/**",
+    "./**/.stryker-tmp/**"
   ],
   "cleanTempDir": true,
   "ignoreStatic": true,
   "htmlReporter": {
     "fileName": "reports/mutation/mutation.html"
+  },
+  "jsonReporter": {
+    "fileName": "reports/mutation/mutation-report.json"
+  },
+  "clearTextReporter": {
+    "allowColor": true,
+    "logTests": true,
+    "maxTestsToLog": 3
   }
 }
