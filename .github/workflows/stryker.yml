@@ -62,7 +62,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Mode:** Incremental Mutation Testing" >> $GITHUB_STEP_SUMMARY
+          echo "- **Mode:** Incremental Workspace Mutation Testing" >> $GITHUB_STEP_SUMMARY
           echo "- **Status:** Completed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "The HTML report artifact \`stryker-mutation-report-run-${{ github.run_number }}\` contains the fresh, single-run report." >> $GITHUB_STEP_SUMMARY
@@ -73,5 +73,5 @@ jobs:
         with:
           name: stryker-mutation-report-run-${{ github.run_number }}
           path: reports/mutation/
-          if-no-files-found: ignore
+          if-no-files-found: warn
           retention-days: 30
