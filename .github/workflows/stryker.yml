@@ -10,6 +10,11 @@ on:
       - main
       - develop
   workflow_dispatch:
+    inputs:
+      full_run:
+        description: 'Run full workspace mutation test across all 21 files'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -43,7 +48,14 @@ jobs:
         run: rm -rf reports/
 
       - name: Run Stryker Mutation Testing
-        run: npx stryker run
+        run: |
+          if [ "${{ inputs.full_run }}" = "true" ]; then
+            echo "Running FULL workspace mutation test across all 21 files..."
+            npx stryker run stryker.full.config.json
+          else
+            echo "Running FAST incremental mutation test on git-changed files..."
+            npx stryker run
+          fi
 
       - name: Generate Workflow Step Summary
         if: always()
@@ -52,6 +64,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Mode:** ${{ inputs.full_run == true && 'FULL Workspace' || 'FAST Incremental (@git)' }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Status:** Completed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "The HTML report artifact \`stryker-mutation-report-run-${{ github.run_number }}\` contains the fresh, single-run report." >> $GITHUB_STEP_SUMMARY
