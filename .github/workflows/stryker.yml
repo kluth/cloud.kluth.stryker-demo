@@ -53,6 +53,8 @@ jobs:
         run: rm -rf reports/mutation/
 
       - name: Run Stryker Mutation Testing
+        env:
+          GITHUB_STEP_SUMMARY: ""
         run: npx stryker run
 
       - name: Generate Workflow Step Summary
