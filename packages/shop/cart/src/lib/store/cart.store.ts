@@ -96,6 +96,7 @@ export const CartStore = signalStore(
       convertedTotal,
       itemCount,
       isEmpty,
+      hasCouponApplied: () => store.appliedDiscount() !== null,
     };
   }),
   withMethods((store) => ({
