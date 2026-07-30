@@ -22,7 +22,7 @@
     "./**/*.spec.ts"
   ],
   "mutate": [
-    "@git"
+    "@git:HEAD~1"
   ],
   "allowEmpty": true,
   "allowConsoleColors": true,

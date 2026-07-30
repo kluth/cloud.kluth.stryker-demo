@@ -142,9 +142,11 @@ describe('CartStore', () => {
     store.addItem(mockProductA, 1);
     store.applyCoupon('SAVE10');
     expect(store.couponCode()).toBe('SAVE10');
+    expect(store.hasCouponApplied()).toBe(true);
 
     store.removeCoupon();
     expect(store.couponCode()).toBeNull();
+    expect(store.hasCouponApplied()).toBe(false);
     expect(store.discountAmount()).toBe(0);
   });
 
